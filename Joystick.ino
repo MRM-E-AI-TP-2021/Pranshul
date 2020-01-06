@@ -41,6 +41,10 @@ Serial.println("X = ");
 Serial.println(X);
 Serial.println("Y = ");
 Serial.println(Y);
+Serial.println(y1);
+Serial.println(y2);
+Serial.println(x1);
+Serial.println(x2);
 x1 = m;
 x2 = 1023 - x1;
 y1 = q;
@@ -67,6 +71,35 @@ if(X<=x2 && X>0 && Y==0)
 fr = 0;
 bl = 0;
 br = n;
+}
+if(X == -x1 && Y == -y1)
+{/*soft left*/
+fl = 0;
+fr = 255;
+bl = 0;
+br = 0;  
+}
+if(X == x2 && Y == -y1)
+{/*soft right*/
+fl = 255;
+fr = 0;
+bl = 0;
+br = 0;   
+}
+if(X == -x1 && Y == y2)
+{/*soft back right*/
+  fl = 0;
+fr = 0;
+bl = 255;
+br = 0; 
+}
+
+if(X == y2 && Y == x2)
+{/*soft back left*/
+  fl = 0;
+fr = 0;
+bl = 0;
+br = 255; 
 }
 if(X>=-x1 && X<0 && Y==0)
 {/*hard left*/
