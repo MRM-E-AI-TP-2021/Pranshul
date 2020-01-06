@@ -4,8 +4,18 @@ const int FL = 11;
 const int FR = 10;
 const int BL = 6;
 const int BR = 5;
+int fl;
+int fr;
+int bl;
+int br;
 int m;
 int n;
+int q;
+int x1;
+int y1;
+int x2;
+int y2;
+int a = 1;
 void setup() {
   pinMode(Xpin, INPUT);
   pinMode(Ypin, INPUT);
@@ -17,116 +27,143 @@ void setup() {
 }
 
 void loop() {
-int  X = analogRead(Xpin) - 493;
-int  Y = analogRead(Ypin) - 500;
-n = 0;
+
+if(a==1){
+  m = analogRead(Xpin);
+  q = analogRead(Ypin);
+  a = 0;
+}
+int X;
+int Y;
+X = analogRead(Xpin) - m;
+Y = analogRead(Ypin) - q;
 Serial.println("X = ");
 Serial.println(X);
 Serial.println("Y = ");
 Serial.println(Y);
+x1 = m;
+x2 = 1023 - x1;
+y1 = q;
+y2 = 1023 - y1;
 if(X==0 && Y==0)
 {/*move nowhere*/
-analogWrite(FL,0);
-analogWrite(FR,0);
-analogWrite(BL,0);
-analogWrite(BR,0);
+fl = 0;
+fr = 0;
+bl = 0;
+br = 0;
 }
-if(X==0 && Y==-500)
+if(X==0 && Y<0 && Y>=-y1)
 {/*move forward*/
-analogWrite(FL,1023);
-analogWrite(FR,1023);
-analogWrite(BL,0);
-analogWrite(BR,0);
+n = map(Y,0,-y1,0,255);
+fl = n;
+fr = n;
+bl = 0;
+br = 0;
 }
-if(X==529 && Y==0)
+if(X<=x2 && X>0 && Y==0)
 {/*hard right*/
-analogWrite(FL,1023);
-analogWrite(FR,0);
-analogWrite(BL,0);
-analogWrite(BR,1023);
+  n = map(X,0,x2,0,255);
+  fl = n;
+fr = 0;
+bl = 0;
+br = n;
 }
-if(X==-493 && Y==0)
+if(X>=-x1 && X<0 && Y==0)
 {/*hard left*/
-analogWrite(FL,0);
-analogWrite(FR,1023);
-analogWrite(BL,1023);
-analogWrite(BR,0);
+  n = map(X,0,-x1,0,255);
+  fl = 0;
+fr = n;
+bl = n;
+br = 0;
 }
 
-if(X==0 && Y==523)
+if(X==0 && Y>0 && Y<=y2)
 {/*move back*/
-analogWrite(FL,0);
-analogWrite(FR,0);
-analogWrite(BL,1023);
-analogWrite(BR,1023);
+  n = map(Y,0,y2,0,255);
+  fl = 0;
+fr = 0;
+bl = n;
+br = n;
 }
-if(X == 529 && Y<0 && Y>-500)
+if(X == x2 && Y<0 && Y>-y1)
 {/*1*/
-  n = map(Y,-500,0,0,255);
-analogWrite(FL,255);
-analogWrite(FR,0);
-analogWrite(BL,0);
-analogWrite(BR,n);
+  n = map(Y,-y1,0,0,255);
+  fl = 255;
+fr = 0;
+bl = 0;
+br = n;
 }
 
-if(X<529 && X>0 && Y == -500)
+if(X<x2 && X>0 && Y == -y1)
 {/*2*/
-  n = map(X,529,0,0,255);
-analogWrite(FL,255);
-analogWrite(FR,n);
-analogWrite(BL,0);
-analogWrite(BR,0);
+  n = map(X,x2,0,0,255);
+  fl = 255;
+fr = n;
+bl = 0;
+br = 0;
 }
-if(X == -493 && Y<0 && Y>-500)
+if(X == -x1 && Y<0 && Y>-y1)
 {/*4*/
-  n = map(Y,-500,0,0,255);
-analogWrite(FL,0);
-analogWrite(FR,255);
-analogWrite(BL,n);
-analogWrite(BR,0);
+  n = map(Y,-y1,0,0,255);
+  fl = 0;
+fr = 255;
+bl = n;
+br = 0;
 }
 
-if(X<0 && X>-493 && Y == -500)
+if(X<0 && X>-x1 && Y == -y1)
 {/*3*/
-  n = map(X,-493,0,0,255);
-analogWrite(FL,n);
-analogWrite(FR,255);
-analogWrite(BL,0);
-analogWrite(BR,0);
+  n = map(X,-x1,0,0,255);
+  fl = n;
+fr = 255;
+bl = 0;
+br = 0;
 }
-if(X == 529 && Y<523 && Y>0)
+if(X == x2 && Y<y2 && Y>0)
 {/*8*/
-  n = map(Y,523,0,0,255);
-analogWrite(FL,0);
-analogWrite(FR,n);
-analogWrite(BL,255);
-analogWrite(BR,0);
+  n = map(Y,y2,0,0,255);
+  fl = n;
+fr = 0;
+bl = 0;
+br = 255;
 }
 
-if(X<529 && X>0 && Y == 523)
+if(X<x2 && X>0 && Y == y2)
 {/*7*/
-  n = map(X,529,0,0,255);
-analogWrite(FL,0);
-analogWrite(FR,0);
-analogWrite(BL,255);
-analogWrite(BR,n);
+  n = map(X,x2,0,0,255);
+  fl = 0;
+fr = 0;
+bl = n;
+br = 255;
 }
 
-if(X == -493 && Y<523 && Y>0)
+if(X == -x1 && Y<y2 && Y>0)
 {/*5*/
-n = map(Y,523,0,0,255);
-analogWrite(FL,n);
-analogWrite(FR,0);
-analogWrite(BL,0);
-analogWrite(BR,255);
+n = map(Y,y2,0,0,255);
+fl = 0;
+fr = n;
+bl = 255;
+br = 0;
 }
 
-if(X<0 && X>-493 && Y == 523)
+if(X<0 && X>-x1 && Y == y2)
 {/*6*/
-  n = map(X,-493,0,0,255);
-analogWrite(FL,0);
-analogWrite(FR,0);
-analogWrite(BL,n);
-analogWrite(BR,255);
+  n = map(X,-x1,0,0,255);
+  fl = 0;
+fr = 0;
+bl = 255;
+br = n;
 }
+analogWrite(FL,fl);
+analogWrite(FR,fr);
+analogWrite(BL,bl);
+analogWrite(BR,br);
+Serial.println("fl = ");
+Serial.println(fl);
+Serial.println("fr = ");
+Serial.println(fr);
+Serial.println("bl = ");
+Serial.println(bl);
+Serial.println("br = ");
+Serial.println(br);
 }
