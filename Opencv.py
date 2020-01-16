@@ -1,47 +1,43 @@
+
 import cv2
 import  numpy as np
 def nothing(x):
-    print(x);
-
+    print(x)
+def save(x):
+    if(x==1):
+        Thresh1 = np.array([lh,ls,lv])
+        Thresh2 = np.array([uh,hs,hv])
+        print(Thresh1)
+        print(Thresh2)
 cv2.namedWindow("HSV")
-cv2.createTrackbar("R", "HSV", 0, 255, nothing);
-cv2.createTrackbar("B", "HSV", 0, 255, nothing);
-cv2.createTrackbar("G", "HSV", 0, 255, nothing);
-r_val =0
-b_val =0
-g_val =0
-l=0
-p=0
+cv2.createTrackbar("lh", "HSV", 0, 179, nothing);
+cv2.createTrackbar("ls", "HSV", 0, 255, nothing);
+cv2.createTrackbar("lv", "HSV", 0, 255, nothing);
+cv2.createTrackbar("uh", "HSV", 179, 179, nothing);
+cv2.createTrackbar("hs", "HSV", 255, 255, nothing);
+cv2.createTrackbar("hv", "HSV", 255, 255, nothing);
+cv2.createTrackbar("save","HSV",0,1,save);
+
+
 cap = cv2.VideoCapture(0)
-while(cap.isOpened()):
+while(True):
     z,frame = cap.read()
     if(z==True):
         HSV = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
-        ball = HSV[300:200, 320:240]
-        r_val = cv2.getTrackbarPos('R', 'HSV')
-        b_val = cv2.getTrackbarPos('B', 'HSV')
-        g_val = cv2.getTrackbarPos('G', 'HSV')
 
-        if(cv2.waitKey(1) & 0xFF == ord("c")):
-            l=1
-        if(l==1):
-            cv2.rectangle(HSV, (540, 380), (640, 480),(b_val,g_val,r_val), -1)
-        if (cv2.waitKey(1) & 0xFF == ord("q")):
-            l=0
-        colour = np.uint8([[[b_val,g_val,r_val]]])
-        thresh = cv2.cvtColor(colour, cv2.COLOR_HSV2BGR)
-        mask = cv2.inRange(HSV,thresh-30,thresh+30)
-        HSV1 = cv2.bitwise_and(HSV,HSV,mask=mask)
+        lh = cv2.getTrackbarPos('lh', "HSV")
+        ls = cv2.getTrackbarPos('ls', "HSV")
+        lv = cv2.getTrackbarPos('lv', "HSV")
+        uh = cv2.getTrackbarPos('uh', "HSV")
+        hs = cv2.getTrackbarPos('hs', "HSV")
+        hv = cv2.getTrackbarPos('hv', "HSV")
 
+        thresh1 = np.array([lh,ls,lv])
+        thresh2 = np.array([uh,hs,hv])
 
-        if(cv2.waitKey(1) & 0xFF == ord("m")):
-            p=1
-        if(p==1):
-            cv2.imshow("HSV",mask)
-        else:
-            cv2.imshow("HSV", HSV)
-        if (cv2.waitKey(1) & 0xFF == ord("q")):
-            p=0
+        mask = cv2.inRange(HSV,thresh1,thresh2)
+        HSV1 = cv2.bitwise_and(frame,frame,mask=mask)
+        cv2.imshow("HSV",HSV1)
         if(cv2.waitKey(1) & 0xFF == 27):
             break
     else:
