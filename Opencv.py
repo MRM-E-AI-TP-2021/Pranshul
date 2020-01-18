@@ -1,5 +1,3 @@
-
-
 import cv2
 import  numpy as np
 
@@ -19,15 +17,13 @@ cv2.createTrackbar("uh", "HSV",179, 179, nothing);
 cv2.createTrackbar("hs", "HSV",255, 255, nothing);
 cv2.createTrackbar("hv", "HSV",255, 255, nothing);
 cv2.createTrackbar("save","HSV",0,1,save);
-cv2.setTrackbarPos('lh',"HSV",25)
-cv2.setTrackbarPos('ls',"HSV",85)
-cv2.setTrackbarPos('lv',"HSV",10)
-cv2.setTrackbarPos('uh',"HSV",80)
+cv2.setTrackbarPos('lh',"HSV",30)
+cv2.setTrackbarPos('ls',"HSV",42)
+cv2.setTrackbarPos('lv',"HSV",67)
+cv2.setTrackbarPos('uh',"HSV",63)
 cv2.setTrackbarPos('hs',"HSV",255)
 cv2.setTrackbarPos('hv',"HSV",255)
 cap = cv2.VideoCapture(0)
-fourcc = cv2.VideoWriter_fourcc(*'CVID')
-out = cv2.VideoWriter("ball detection",fourcc,20.0,(640,480))
 while(True):
     z,frame = cap.read()
     if(z==True):
@@ -49,13 +45,27 @@ while(True):
         kernel = np.ones((2,2),np.uint8)/4
         mask = cv2.dilate(mask, kernel, iterations=1)
         mask = cv2.filter2D(mask, -1, kernel)
+        #mask = cv2.medianBlur(mask,5)
+
         image, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         HSV1 = cv2.bitwise_and(frame, frame, mask=mask)
         if(len(contours)>1):
             (x,y),radius = cv2.minEnclosingCircle(contours[0])
             center = (int(x),int(y))
             radius = int(radius)
-            HSV1 = cv2.circle(HSV1,center,radius,(0,255,0))
+            x, y, w, h = cv2.boundingRect(contours[0])
+            aspect_ratio = float(w) / h
+            area1 = np.pi * radius * radius
+            area2 = cv2.contourArea(contours[0])
+            
+            if(area1 != 0 and area2 != 0 ):
+                e = area1/area2
+            else:
+                e = 0
+            
+            if(aspect_ratio > a1 and aspect_ratio < a2 and e < e1 and minrad<radius):
+                HSV1 = cv2.circle(HSV1,center,radius,(0,255,0),2)
+                print("BALL!!!!")
         else:
             pass
         cv2.imshow("HSV",HSV1)
@@ -64,6 +74,5 @@ while(True):
             break
     else:
         break
-out.release()
 cap.release()
 cv2.destroyAllWindows()
