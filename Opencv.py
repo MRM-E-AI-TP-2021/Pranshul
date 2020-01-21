@@ -75,6 +75,8 @@ while(True):
             if(aspect_ratio > a1 and aspect_ratio < a2 and e>e1 and e < e2 and minrad<radius):
                 frame = cv2.circle(frame,center,radius,(0,0,255),2)
                 frame = cv2.putText(frame,"Ball",(int(x-radius),int(y-radius)),fontFace=cv2.FONT_HERSHEY_COMPLEX,fontScale=1,color=(0,0,255))
+                frame = cv2.putText(frame, "Ball detected", (380,30),
+                                    fontFace=cv2.FONT_HERSHEY_COMPLEX, fontScale=1, color=(0, 0, 255),thickness=3)
                 print("BALL!!!!",po)
                 po = po + 1
 
