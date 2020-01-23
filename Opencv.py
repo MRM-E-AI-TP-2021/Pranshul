@@ -19,15 +19,15 @@ cv2.createTrackbar("hs", "HSV",255, 255, nothing);
 cv2.createTrackbar("hv", "HSV",255, 255, nothing);
 cv2.createTrackbar("save","HSV",0,1,save);
 
-minrad = 15
-a1 = 0.85
-a2 = 1.25
-e1 = 0.85
-e2 = 1.25
-cv2.setTrackbarPos('lh',"HSV",30)
-cv2.setTrackbarPos('ls',"HSV",60)
-cv2.setTrackbarPos('lv',"HSV",40)
-cv2.setTrackbarPos('uh',"HSV",111)
+minrad = 20
+a1 = 0.9
+a2 = 1.1
+e1 = 1
+e2 = 1.1
+cv2.setTrackbarPos('lh',"HSV",25)
+cv2.setTrackbarPos('ls',"HSV",55)
+cv2.setTrackbarPos('lv',"HSV",35)
+cv2.setTrackbarPos('uh',"HSV",125)
 cv2.setTrackbarPos('hs',"HSV",255)
 cv2.setTrackbarPos('hv',"HSV",255)
 cap = cv2.VideoCapture(0)
@@ -48,11 +48,7 @@ while(True):
 
 
         mask = cv2.inRange(HSV,thresh1,thresh2)
-
-        kernel = np.ones((2,2),np.uint8)/4
-        mask  = cv2.erode(mask,kernel,iterations=2)
-        mask = cv2.dilate(mask,kernel,iterations=1)
-
+        mask = cv2.GaussianBlur(mask,(7,7),0)
         #mask = cv2.medianBlur(mask,5)
         k =1
         image, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
@@ -71,8 +67,15 @@ while(True):
                     e = area1/area2
                 else:
                     e = 0
-
-            if(aspect_ratio > a1 and aspect_ratio < a2 and e>e1 and e < e2 and minrad<radius):
+                area = cv2.contourArea(contours[i])
+                hull = cv2.convexHull(contours[i])
+                hull_area = cv2.contourArea(hull)
+                if(hull_area != 0):
+                    solidity = float(area) / hull_area
+                else:
+                    solidity = 0
+            if(aspect_ratio > a1 and aspect_ratio < a2 and e>e1 and e < e2 and minrad<radius and solidity > a1 and solidity < a2):
+                frame = cv2.drawContours(frame,contours,i,color=(255,0,0),thickness=3)
                 frame = cv2.circle(frame,center,radius,(0,0,255),2)
                 frame = cv2.putText(frame,"Ball",(int(x-radius),int(y-radius)),fontFace=cv2.FONT_HERSHEY_COMPLEX,fontScale=1,color=(0,0,255))
                 frame = cv2.putText(frame, "Ball detected", (380,30),
@@ -83,8 +86,7 @@ while(True):
         else:
             pass
 
-        cv2.imshow("HSV",frame)
-
+        cv2.imshow("HSV",mask)
         if(cv2.waitKey(1) & 0xFF == 27):
             break
     else:
