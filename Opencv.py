@@ -67,7 +67,7 @@ while(True):
         else:
             pass
         fps = cap.get(cv2.CAP_PROP_FPS)
-        print(fps)
+        print(frame)
         cv2.imshow("HSV",frame)
         cv2.imshow("mask",mask)
         if(cv2.waitKey(1) & 0xFF == 27):
