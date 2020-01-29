@@ -1,12 +1,31 @@
+import socket
+import pickle
 import cv2
 import numpy as np
-import socket
-a = np.ones((640,480))
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(("10.42.0.1",2000))
 
-for i in range(0,4):
-    for j in range(0,2):
-        a = s.recv(1024,int)
-print(a)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('localhost', 2000))
+
+while 1:
+    data = []
+    data_arr = 0
+    while True:
+        packet = s.recv(99999)
+        if not packet:
+            break
+        try:
+            if(pickle.loads(packet) == "a"):
+                break
+        except:
+            data.append(packet)
+            continue
+    try:
+        data_arr = pickle.loads(b"".join(data))
+        data_arr = np.array(data_arr,dtype=np.uint8)
+        cv2.imshow('frame', data_arr)
+    except:
+        pass
+    if(cv2.waitKey(1) & 0xFF == 27):
+        break
+cv2.destroyAllWindows()
 s.close()

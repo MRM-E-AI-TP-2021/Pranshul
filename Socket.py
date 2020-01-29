@@ -1,18 +1,21 @@
 import socket
 import cv2
 import numpy as np
-frame = np.zeros((640,480))
+import pickle
 cap = cv2.VideoCapture(0)
-po = 0
+cap.set(3,200)
+cap.set(4,150)
 s=socket.socket()
 s.bind(('', 2000))
 s.listen(3)
+a,c = s.accept()
 while(True):
     z , frame = cap.read()
     if(z==True):
-        HSV = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-        HSV = np.array2string(HSV)
-        HSV = HSV.encode()
-        a,c=s.accept()
-        a.send(HSV)
+        frame = pickle.dumps(frame)
+        a.sendall(frame)
+        lol = pickle.dumps("a")
+        a.sendall(lol)
 a.close()
+cap.release()
+cv2.destroyAllWindows()
