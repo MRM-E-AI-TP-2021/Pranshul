@@ -2,14 +2,6 @@ import cv2
 import  numpy as np
 m =0
 aspect_ratio = 0
-def nothing(x):
-    pass
-def save(x):
-    if(x==1):
-        Thresh1 = np.array([lh,ls,lv])
-        Thresh2 = np.array([uh,hs,hv])
-        print(Thresh1)
-        print(Thresh2)
 minrad = 20
 a1 = 0.9
 a2 = 1.1
@@ -23,7 +15,6 @@ hs = 255
 hv = 255
 
 cap = cv2.VideoCapture(0)
-po = 0
 while(True):
     z , frame = cap.read()
     if(z==True):
@@ -61,13 +52,10 @@ while(True):
                 frame = cv2.putText(frame,"Ball",(int(x-radius),int(y-radius)),fontFace=cv2.FONT_HERSHEY_COMPLEX,fontScale=1,color=(0,0,255))
                 frame = cv2.putText(frame, "Ball detected", (380,30),
                                     fontFace=cv2.FONT_HERSHEY_COMPLEX, fontScale=1, color=(0, 0, 255),thickness=3)
-                po = po + 1
-                print("BALL",po)
 
         else:
             pass
         fps = cap.get(cv2.CAP_PROP_FPS)
-        print(frame)
         cv2.imshow("HSV",frame)
         cv2.imshow("mask",mask)
         if(cv2.waitKey(1) & 0xFF == 27):
