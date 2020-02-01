@@ -9,11 +9,11 @@ s.listen(3)
 a,c = s.accept()
 while(True):
     z , frame = cap.read()
+    print(frame)
     if(z==True):
-        frame = cv2.imencode('.png',cv2.IMWRITE_PNG_COMPRESSION)
-        print(frame)
-        frame = pickle.dumps(frame)
+        frame = cv2.imencode('.jpeg',frame)
         
+        frame = pickle.dumps(frame)
         a.sendall(frame)
         lol = pickle.dumps("pg")
         a.sendall(lol)
