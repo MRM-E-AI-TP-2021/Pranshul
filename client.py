@@ -11,10 +11,13 @@ while 1:
         if not packet:
             print("error")
             break
-        if(pickle.loads(packet) == "pg"):
-            break
-        else:
-            a.append(packet)
+        try:
+            if(pickle.loads(packet) == "pg"):
+                break
+            else:
+                a.append(packet)
+        except:
+            pass
     m,data_arr = pickle.loads(b"".join(a))
     data_arr = cv2.imdecode(data_arr,cv2.IMREAD_ANYCOLOR)
     print(data_arr)
