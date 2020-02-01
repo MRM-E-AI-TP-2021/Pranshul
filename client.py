@@ -3,7 +3,7 @@ import pickle
 import cv2
 import numpy as np
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('192.168.43.203', 2000))
+s.connect(('10.89.0.176', 2000))
 while 1:
     a = []
     while True:
@@ -11,21 +11,13 @@ while 1:
         if not packet:
             print("error")
             break
-        try:
-            if(pickle.loads(packet) == "pg"):
-                break
-            else:
-                a.append(packet)
-        except:
-            pass
-    try:    
-        m,data_arr = pickle.loads(b"".join(a))
-        data_arr = cv2.imdecode(data_arr,cv2.IMREAD_ANYCOLOR)
-        print(data_arr)
-        cv2.imshow('frame',data_arr)
-        if(cv2.waitKey(1) & 0xFF == 27):
-            break
-    except:
-        pass
+        a.append(packet)
+        if(pickle.loads(packet) == "pg"):
+            break    
+    m,data_arr = pickle.loads(b"".join(a))
+    data_arr = cv2.imdecode(data_arr,cv2.IMREAD_ANYCOLOR)
+    cv2.imshow('frame',data_arr)
+    if(cv2.waitKey(1) & 0xFF == 27):
+        break
 cv2.destroyAllWindows()
 s.close()

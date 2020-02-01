@@ -2,16 +2,17 @@ import socket
 import cv2
 import numpy as np
 import pickle
+import time
 cap = cv2.VideoCapture(0)
 cap.set(3,400)
 cap.set(4,300)
 s=socket.socket()
-s.bind(('192.168.43.203',2000))
+s.bind(('10.89.0.176',2000))
 s.listen(3)
 a,c = s.accept()
+time.sleep(1)
 while(True):
     z , frame = cap.read()
-    print(frame)
     if(z==True):
         frame = cv2.imencode('.jpeg',frame)
         
