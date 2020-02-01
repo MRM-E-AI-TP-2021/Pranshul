@@ -3,8 +3,10 @@ import cv2
 import numpy as np
 import pickle
 cap = cv2.VideoCapture(0)
+cap.set(3,400)
+cap.set(4,300)
 s=socket.socket()
-s.bind(('', 2001))
+s.bind(('192.168.43.203',2000))
 s.listen(3)
 a,c = s.accept()
 while(True):
