@@ -4,10 +4,10 @@ import numpy as np
 import pickle
 import time
 cap = cv2.VideoCapture(0)
-cap.set(3,400)
-cap.set(4,300)
+cap.set(3,200)
+cap.set(4,150)
 s=socket.socket()
-s.bind(('10.89.0.176',2000))
+s.bind(('',2000))
 s.listen(3)
 a,c = s.accept()
 time.sleep(1)
@@ -18,7 +18,7 @@ while(True):
         
         frame = pickle.dumps(frame)
         a.sendall(frame)
-        lol = pickle.dumps("pg")
+        lol = pickle.dumps("bk")
         a.sendall(lol)
 a.close()
 cap.release()

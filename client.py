@@ -3,7 +3,7 @@ import pickle
 import cv2
 import numpy as np
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('10.89.0.176', 2000))
+s.connect(('localhost', 2000))
 while 1:
     a = []
     while True:
@@ -12,7 +12,7 @@ while 1:
             print("error")
             break
         a.append(packet)
-        if(pickle.loads(packet) == "pg"):
+        if(pickle.loads(packet) == "bk"):
             break    
     m,data_arr = pickle.loads(b"".join(a))
     data_arr = cv2.imdecode(data_arr,cv2.IMREAD_ANYCOLOR)
