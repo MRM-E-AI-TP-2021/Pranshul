@@ -10,14 +10,15 @@ s=socket.socket()
 s.bind(('',2000))
 s.listen(3)
 a,c = s.accept()
-time.sleep(1)
+time.sleep(5)
 while(True):
     z , frame = cap.read()
     if(z==True):
-        frame = cv2.imencode('.jpeg',frame)
+        frame = cv2.imencode('.jpg',frame)
         
         frame = pickle.dumps(frame)
         a.sendall(frame)
+        time.sleep(0.01)
         lol = pickle.dumps("bk")
         a.sendall(lol)
 a.close()
