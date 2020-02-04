@@ -170,8 +170,24 @@ while 1:
         print("fr = ",fr)
         print("bl = ",bl)
         print("br = ",br)
-        line = "{0:0=3d}".format(fl)
-        line = str(line)
-        line= line.encode()
-        ser.write(line)
+        fl = "{0:0=4d}".format(fl)
+        fl = fl*10+1
+        fl = str(fl)
+        fl = line.encode()
+        ser.write(fl)
+        fr = "{0:0=4d}".format(fr)
+        fr = fr*10+2
+        fr = str(fr)
+        fr = line.encode()
+        ser.write(fr)
+        bl = "{0:0=4d}".format(bl)
+        bl = bl*10+3
+        bl = str(bl)
+        bl = line.encode()
+        ser.write(bl)
+        br = "{0:0=4d}".format(br)
+        br = br*10+4
+        br = str(br)
+        br = line.encode()
+        ser.write(br)
 pygame.quit ()
