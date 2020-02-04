@@ -36,7 +36,6 @@ while 1:
         x2 = 1023
         y1 = 1023
         y2 = 1023
-        print(X,Y,x1,y1,x2,y2)
         if(X==0):
             if(Y==0):
                 ####/*move nowhere*###/
@@ -171,7 +170,8 @@ while 1:
         print("fr = ",fr)
         print("bl = ",bl)
         print("br = ",br)
-        line = str(fl)
+        line = "{0:0=3d}".format(fl)
+        line = str(line)
         line= line.encode()
         ser.write(line)
 pygame.quit ()
