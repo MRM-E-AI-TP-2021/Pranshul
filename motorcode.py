@@ -28,8 +28,8 @@ while 1:
         clock.tick(60)
         X = my_joystick.get_axis(0)
         Y = my_joystick.get_axis(1)
-        X=map(X, -1, 1, -1023, 1023)
-        Y=-1*(map(Y, -1, 1, -1023, 1023))
+        X=-1*(map(X, -1, 1, -1023, 1023))
+        Y=(map(Y, -1, 1, -1023, 1023))
         X = X
         Y = Y
         x1 = 1023
@@ -166,30 +166,24 @@ while 1:
             fr = n
             bl = 255
             br = 0
-        print("fl = ",fl)
-        print("fr = ",fr)
-        print("bl = ",bl)
-        print("br = ",br)
-        fl = "{0:0=4d}".format(fl)
         fl = int(fl)*10+1
+        fr = int(fr)*10+2
+        bl = int(bl)*10+3
+        br = int(br)*10+4
+        fl = "{0:0=4d}".format(fl)
         fl = str(fl)
         fl = fl.encode()
         time.sleep(0.05)
         ser.write(fl)
         fr = "{0:0=4d}".format(fr)
-        fr = int(fr)*10+2
         fr = str(fr)
         fr = fr.encode()
-        time.sleep(0.05)
         ser.write(fr)
         bl = "{0:0=4d}".format(bl)
-        bl = int(bl)*10+3
         bl = str(bl)
         bl = bl.encode()
-        time.sleep(0.05)
         ser.write(bl)
         br = "{0:0=4d}".format(br)
-        br = int(br)*10+4
         br = str(br)
         br = br.encode()
         time.sleep(0.05)
