@@ -78,16 +78,17 @@ while True:
     nmeaobj = np.array(a.split(","))
     if nmeaobj[0] == "$GPRMC":
         if(str(nmeaobj[4])=="S"):
-            latitude = -float(nmeaobj[3])
+            latitude = -float(nmeaobj[3])/100
         else:
-            latitude = float(nmeaobj[3])
+            latitude = float(nmeaobj[3])/100
         if(str(nmeaobj[6])=="E"):
-            longitude = -float(nmeaobj[5])
+            longitude = -float(nmeaobj[5])/100
         else:
-            longitude = float(nmeaobj[5])
+            longitude = float(nmeaobj[5])/100
         X = math.cos(latitude_given)*math.sin(longitude_given-longitude)
         Y = math.cos(latitude)*math.sin(latitude_given) - math.sin(latitude)*math.cos(latitude_given)*math.cos(longitude_given-longitude)
         angle1 = math.atan2(X,Y)
+        
     angle2 = angle(X_axis_H,Y_axis_H,Z_axis_H)
     print(angle1 - angle2)
     print("Distance = %f" %Distance(latitude,longitude,latitude_given,longitude_given))
