@@ -3,7 +3,6 @@ import serial
 import pickle
 import time
 ser = serial.Serial('/dev/ttyUSB0')
-     # write a string
 def map(x, in_min, in_max, out_min, out_max):
     return int((x-in_min) * (out_max-out_min) / (in_max-in_min) + out_min)
 pygame.init()
@@ -12,10 +11,6 @@ my_joystick = pygame.joystick.Joystick(0)
 my_joystick.init()
 clock = pygame.time.Clock()
 a = 1
-fl = 0
-fr = 0
-bl = 0
-br = 0
 m = 0
 n = 0
 q = 0
@@ -26,12 +21,16 @@ y2 = 0
 while 1:
     for event in pygame.event.get():
         clock.tick(60)
-        X = my_joystick.get_axis(0)
-        Y = my_joystick.get_axis(1)
+        X = my_joystick.get_axis(1)
+        Y = my_joystick.get_axis(0)
         X=-1*(map(X, -1, 1, -1023, 1023))
         Y=(map(Y, -1, 1, -1023, 1023))
         X = X
         Y = Y
+        fl = 0
+        fr = 0
+        bl = 0
+        br = 0
         x1 = 1023
         x2 = 1023
         y1 = 1023
@@ -103,7 +102,6 @@ while 1:
                 br = 0
         
         elif(Y == 1022 or Y == 1023):
-            print("back")
             if(X == -x1):
                 ####/*soft back right*###/
                 fl = 0
@@ -112,7 +110,6 @@ while 1:
                 br = 0
             elif(X<0 and X>-x1):
             ###/*6*###/
-                print("66666")
                 n = map(X,-x1,0,0,255)
                 fl = 0
                 fr = 0
@@ -132,9 +129,6 @@ while 1:
             fr = 0
             bl = 0
             br = 255 
-       
-        
-
         elif(X == x2 and Y<0 and Y>-y1):
         ###/*1*###/
             n = map(Y,-y1,0,0,255)
@@ -166,6 +160,7 @@ while 1:
             fr = n
             bl = 255
             br = 0
+        print(fl,fr,bl,br)
         fl = int(fl)*10+1
         fr = int(fr)*10+2
         bl = int(bl)*10+3
@@ -173,19 +168,22 @@ while 1:
         fl = "{0:0=4d}".format(fl)
         fl = str(fl)
         fl = fl.encode()
-        time.sleep(0.05)
+        time.sleep(0.01)
         ser.write(fl)
         fr = "{0:0=4d}".format(fr)
         fr = str(fr)
         fr = fr.encode()
+        time.sleep(0.01)
         ser.write(fr)
         bl = "{0:0=4d}".format(bl)
         bl = str(bl)
         bl = bl.encode()
+        time.sleep(0.01)
         ser.write(bl)
         br = "{0:0=4d}".format(br)
         br = str(br)
         br = br.encode()
-        time.sleep(0.05)
+        time.sleep(0.01)
         ser.write(br)
+        
 pygame.quit ()

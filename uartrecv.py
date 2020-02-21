@@ -2,14 +2,14 @@ import serial
 import time
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(18, GPIO.OUT)
-GPIO.setup(13,GPIO.OUT)
-GPIO.setup(19, GPIO.OUT)
+GPIO.setup(35, GPIO.OUT)
+GPIO.setup(32,GPIO.OUT)
+GPIO.setup(33, GPIO.OUT)
 GPIO.setup(12,GPIO.OUT)
-p1 = GPIO.PWM(18,500)
-p2 = GPIO.PWM(19,500)
-p1 = GPIO.PWM(13,500)
-p2 = GPIO.PWM(12,500)
+p1 = GPIO.PWM(12,2000)
+p2 = GPIO.PWM(32,2000)
+p1 = GPIO.PWM(33,500)
+p2 = GPIO.PWM(35,500)
 p1.start(0)
 p2.start(0)
 p3.start(0)
@@ -22,7 +22,6 @@ bl = 0
 br = 0
 while True:
     try:
-        time.sleep(0.01)
         Data = ser.read(4)
         data = str(Data.decode("utf-8"))
         try:
