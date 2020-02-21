@@ -13,9 +13,17 @@ Z_axis_H    = 0x05              #Address of Z-axis MSB data register
 Y_axis_H    = 0x07              #Address of Y-axis MSB data register
 declination = -0.00669          #define declination angle of location where measurement going to be done
 pi          = 3.14159265359     #define pi value
-def Distance(x1,y1,x2,y2):  
-    dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)  
-    return dist
+def Distance(lat1,lon1,lat2,lon2):  
+     R = 6372800  # Earth radius in meters    
+    phi1, phi2 = math.radians(lat1), math.radians(lat2) 
+    dphi       = math.radians(lat2 - lat1)
+    dlambda    = math.radians(lon2 - lon1)
+    
+    a = math.sin(dphi/2)**2 + \
+        math.cos(phi1)*math.cos(phi2)*math.sin(dlambda/2)**2
+    
+    return 2*R*math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
 def Magnetometer_Init():
         #write to Configuration Register A
         bus.write_byte_data(Device_Address, Register_A, 0x70)
@@ -46,8 +54,8 @@ Device_Address = 0x1e   # HMC5883L magnetometer device address
 Magnetometer_Init()
 ser = serial.Serial('/dev/ttyUSB0',baudrate=4800)
 ser.flushInput()
-latitude_given = 13.34801000
-longitude_given = 74.79225166
+latitude_given = 13.208565
+longitude_given = 7.4475290
 angle1  = 0
 latitude = 0 
 longitude = 0 
@@ -70,17 +78,17 @@ while True:
     nmeaobj = np.array(a.split(","))
     if nmeaobj[0] == "$GPRMC":
         if(str(nmeaobj[4])=="S"):
-            latitude = -float(nmeaobj[3])/100
+            latitude = -float(nmeaobj[3])
         else:
-            latitude = float(nmeaobj[3])/100
+            latitude = float(nmeaobj[3])
         if(str(nmeaobj[6])=="E"):
-            longitude = -float(nmeaobj[5])/100
+            longitude = -float(nmeaobj[5])
         else:
-            longitude = float(nmeaobj[5])/100
+            longitude = float(nmeaobj[5])
         X = math.cos(latitude_given)*math.sin(longitude_given-longitude)
         Y = math.cos(latitude)*math.sin(latitude_given) - math.sin(latitude)*math.cos(latitude_given)*math.cos(longitude_given-longitude)
         angle1 = math.atan2(X,Y)
     angle2 = angle(X_axis_H,Y_axis_H,Z_axis_H)
-    print(angle2 - angle1)
+    print(angle1 - angle2)
     print("Distance = %f" %Distance(latitude,longitude,latitude_given,longitude_given))
     sleep(0.01)
