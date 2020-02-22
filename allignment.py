@@ -54,8 +54,8 @@ Device_Address = 0x1e   # HMC5883L magnetometer device address
 Magnetometer_Init()
 ser = serial.Serial('/dev/ttyUSB0',baudrate=4800)
 ser.flushInput()
-latitude_given = 13.208565
-longitude_given = 7.4475290
+latitude_given = 13.34786166
+longitude_given = 74.79216999
 angle1  = 0
 latitude = 0 
 longitude = 0 
